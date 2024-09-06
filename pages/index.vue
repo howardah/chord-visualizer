@@ -37,6 +37,15 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+    name: "Chord Visualizer"
+});
+
+useHead({
+  title: "Chord Visualizer",
+});
+
+
 import { instruments, noteValues, type Instrument, type Note } from '~/assets/instruments';
 
 // const stringNotes: Note[] = ["E", "A", "D", "G", "B", "E"];
