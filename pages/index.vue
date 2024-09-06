@@ -13,6 +13,12 @@
       </div>
     </div>
 
+    <div class="w-full p-2 m-auto max-w-screen-lg">
+      <div class="flex flex-row gap-2">
+        <button class="chord-button" :class="{ active: c === chord }" v-for="c in chords" :key="c" @click="toggleChord(c)">{{ c }}</button>
+      </div>
+    </div>
+
     <div class="container">
       <div class="fretboard">
         <div class="fret-numbers my-1">
@@ -24,7 +30,7 @@
         <div class="string" v-for="(string, index) in strings" :key="index">
           <div class="string-label">{{ string.string }}</div>
           <div class="fret" v-for="fret in string.frets" :key="fret.fret">
-            <div class="fret-label">{{ fret.interval }}</div>
+            <div class="fret-label" :class="{ highlight: fret.highlight }">{{ fret.interval }}</div>
           </div>
         </div>
         <div class="fret-numbers my-1">
@@ -49,6 +55,30 @@ definePageMeta({
 useHead({
   title: "Chord Visualizer",
 });
+
+type Chord = 'I' | 'ii' | 'iii' | 'IV' | 'V' | 'vi' | 'vii';
+
+const chords: Chord[] = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
+
+const chordDictionary: Record<Chord, number[]> = {
+  I: [1, 3, 5],
+  ii: [2, 4, 6],
+  iii: [3, 5, 7],
+  IV: [4, 6, 1],
+  V: [5, 7, 2],
+  vi: [6, 1, 3],
+  vii: [7, 2, 4],
+};
+
+const chord = ref<Chord | null>();
+
+const toggleChord = (c: Chord) => {
+  if (chord.value === c) {
+    chord.value = null;
+  } else {
+    chord.value = c;
+  }
+};
 
 // const stringNotes: Note[] = ["E", "A", "D", "G", "B", "E"];
 const instrument = ref<Instrument>(instruments[0]);
@@ -82,10 +112,14 @@ const strings = computed(() => {
       string,
       frets: Array.from({ length: 13 }, (_, index) => index + 1).map((fret) => {
         const note = value(noteValues[string as Note] + fret - 1);
+        const interval = chart.value[note] || "";
+        const highlight = chord.value ? chordDictionary[chord.value].includes(chart.value[note]) : false;
+
         return {
           fret,
-          note: note,
-          interval: chart.value[note] || "",
+          note,
+          interval,
+          highlight,
         };
       }),
     };
@@ -161,6 +195,10 @@ onMounted(() => {
         .fret-label {
           @apply w-full h-10 border-y-2 border-y-slate-300;
           @apply flex items-center justify-center text-slate-800 font-bold;
+
+          &.highlight {
+            @apply bg-slate-500 text-white;
+          }
         }
 
         &:nth-child(14) {
@@ -203,6 +241,17 @@ select {
 
   &.sm {
     @apply max-w-60;
+  }
+}
+
+.chord-button {
+  @apply px-4 py-2 my-4;
+  @apply bg-white border border-gray-300 rounded-md shadow-sm;
+  @apply text-base text-gray-700 font-bold;
+  @apply appearance-none;
+
+  &.active {
+    @apply bg-slate-500 text-white;
   }
 }
 </style>
