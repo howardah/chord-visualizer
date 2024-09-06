@@ -44,37 +44,37 @@ export interface Instrument {
 
 const guitar: Instrument = {
   name: "Guitar (Standard)",
-  stringNotes: ["E", "A", "D", "G", "B", "E"],
+  stringNotes: ["E", "A", "D", "G", "B", "E"].reverse() as Note[],
 };
 
 const bass: Instrument = {
   name: "Bass (Standard)",
-  stringNotes: ["E", "A", "D", "G"],
+  stringNotes: ["E", "A", "D", "G"].reverse() as Note[],
 };
 
 const ukulele: Instrument = {
   name: "Ukulele (Standard)",
-  stringNotes: ["G", "C", "E", "A"],
+  stringNotes: ["G", "C", "E", "A"].reverse() as Note[],
 };
 
 const guitarOpenD: Instrument = {
   name: "Guitar (Open D)",
-  stringNotes: ["D", "A", "D", "F#", "A", "D"],
+  stringNotes: ["D", "A", "D", "F#", "A", "D"].reverse() as Note[],
 };
 
 const pedalSteel: Instrument = {
   name: "Pedal Steel (10 String)",
-  stringNotes: ["B", "D", "E", "F#", "G#", "B", "E", "G#", "D#", "F#"],
+  stringNotes: ["B", "D", "E", "F#", "G#", "B", "E", "G#", "D#", "F#"].reverse() as Note[],
 };
 
 const pedalSteel8: Instrument = {
   name: "Pedal Steel (8 String)",
-  stringNotes: ["F#", "G#", "B", "D#", "F#", "G#", "B", "D#"],
+  stringNotes: ["F#", "G#", "B", "D#", "F#", "G#", "B", "D#"].reverse() as Note[],
 };
 
 const banjo: Instrument = {
   name: "Banjo (Standard)",
-  stringNotes: ["G", "D", "G", "B", "D"],
+  stringNotes: ["G", "D", "G", "B", "D"].reverse() as Note[],
 };
 
 
