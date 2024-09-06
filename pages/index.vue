@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="w-full bg-slate-200 p-2">
-        <div class="flex flex-row gap-2 max-w-screen-lg m-auto">
-            <select class="xs" name="" id="" v-model="root">
-              <option v-for="note in Object.keys(noteValues)" :value="note">{{ note }}</option>
-            </select>
-            <select name="" id="" v-model="instrument">
-              <option v-for="instrument in instruments" :value="instrument">{{ instrument.name }}</option>
-            </select>
-        </div>
+      <div class="flex flex-row gap-2 max-w-screen-lg m-auto">
+        <select class="xs" name="" id="" v-model="root">
+          <option v-for="note in Object.keys(noteValues)" :value="note">{{ note }}</option>
+        </select>
+        <select name="" id="" v-model="instrument">
+          <option v-for="instrument in instruments" :value="instrument">
+            {{ instrument.name }}
+          </option>
+        </select>
+      </div>
     </div>
 
     <div class="container">
@@ -37,16 +39,16 @@
 </template>
 
 <script setup lang="ts">
+import { instruments, noteValues, type Instrument, type Note } from "~/assets/instruments";
+
+const route = useRoute();
 definePageMeta({
-    name: "Chord Visualizer"
+  name: "Chord Visualizer",
 });
 
 useHead({
   title: "Chord Visualizer",
 });
-
-
-import { instruments, noteValues, type Instrument, type Note } from '~/assets/instruments';
 
 // const stringNotes: Note[] = ["E", "A", "D", "G", "B", "E"];
 const instrument = ref<Instrument>(instruments[0]);
@@ -89,6 +91,42 @@ const strings = computed(() => {
       }),
     };
   });
+});
+
+watch(instrument, () => {
+  const query = {
+    instrument: instrument.value.name,
+    root: root.value
+  };
+  
+  navigateTo({ query }, { replace: true });
+});
+
+watch(root, () => {
+  const query = {
+    instrument: instrument.value.name,
+    root: root.value
+  };
+  
+  navigateTo({ query }, { replace: true });
+});
+
+onMounted(() => {
+  const instrumentParam = route.query.instrument as string;
+  const rootParam = route.query.root as Note;
+
+  if (instrumentParam) {
+    const selectedInstrument = instruments.find(
+      (i) => i.name.toLowerCase() === instrumentParam.toLowerCase()
+    );
+    if (selectedInstrument) {
+      instrument.value = selectedInstrument;
+    }
+  }
+
+  if (rootParam && Object.keys(noteValues).includes(rootParam)) {
+    root.value = rootParam;
+  }
 });
 </script>
 
