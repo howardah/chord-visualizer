@@ -65,7 +65,6 @@ const filterChart = (root: Note) => {
   intervals.forEach((interval, index) => {
     const note = value(noteValues[root] + interval - 1);
     const exists = Object.values(noteValues).some((value) => value === note - 2);
-    console.log(note, index + 1, exists);
     if (exists) {
       notes[note] = index + 1;
     }
